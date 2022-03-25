@@ -1,0 +1,22 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-sass-guidelines",
+    "prettier-stylelint"
+  ],
+  "rules": {
+    "order/properties-alphabetical-order": null,
+    "declaration-empty-line-before": null,
+    "selector-class-pattern": null,
+    "max-nesting-depth": null,
+
+    "selector-max-compound-selectors": null,
+    "function-name-case": null,
+    "value-keyword-case": null,
+    "selector-no-qualifying-type":null,
+    "no-descending-specificity":null,
+    "scss/at-import-no-partial-leading-underscore": null,
+    "scss/dollar-variable-pattern":null,
+    "scss/selector-no-redundant-nesting-selector":null
+  }
+}

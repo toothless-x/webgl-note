@@ -1,0 +1,25 @@
+{
+  "extends": "./.typescript/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./",/* Base directory to resolve non-absolute module names. */
+    "paths": {
+      "@Root/*": ["*"],
+      "@Src/*": ["src/*"],
+      "@Views/*": ["src/views/*"],
+      "@Api/*": ["src/api/*"],
+      "@Styles/*": ["src/styles/*"],
+      "@Assets/*": ["src/assets/*"],
+      "@Utils/*": ["src/utils/*"],
+      "@Config/*":["src/config/*"],
+    },
+  },
+  "include": [
+    "./src/*",
+    "./types/typings.d.ts",
+  ],
+  "exclude": [
+    "node_modules",
+    "public",
+    "dist",
+  ],
+}
