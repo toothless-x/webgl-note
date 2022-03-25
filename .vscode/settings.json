@@ -1,0 +1,7 @@
+{
+  "editor.tabSize": 2,
+  "files.autoSave": "onFocusChange",
+  "eslint.alwaysShowStatus": true,
+  "editor.rulers": [80, 110],
+  "files.insertFinalNewline": true,
+}
