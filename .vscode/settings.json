@@ -6,7 +6,7 @@
   ],
   "editor.insertSpaces": true, // tab 改为 空格
   "editor.tabSize": 2, // tab 宽度为两个空格
-  "files.autoSave": "onFocusChange", // 离开 vscode 时自动保存
+  "files.autoSave": "onWindowChange", // 离开 vscode 时自动保存
   "files.eol": "\n", // LF格式换行
   "files.insertFinalNewline": true, // 保存时最后添加一个空行
   "files.trimFinalNewlines": true, // 保存时将最后所有空行合并一个空行

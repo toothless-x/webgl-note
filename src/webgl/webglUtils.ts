@@ -6,7 +6,7 @@ class WebGLUtils {
     options?: any,
   ) {
     const names = ['webgl', 'experimental-webgl', 'webkit-3d', 'moz-webgl'];
-    let context: WebGLRenderingContext;
+    let context: WebGLRenderingContext | null = null;
     for (let i = 0; i < names.length; i += 1) {
       try {
         context = canvas.getContext(names[i], options) as WebGLRenderingContext;
@@ -14,7 +14,7 @@ class WebGLUtils {
       } catch (e) {}
       if (context) break;
     }
-    return context;
+    return context as WebGLRenderingContext;
   }
 
   // 创建着色器

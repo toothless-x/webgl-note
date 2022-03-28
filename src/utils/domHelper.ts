@@ -1,5 +1,4 @@
-/* eslint-disable */
-import { debounce } from 'lodash'
+import { debounce } from 'lodash';
 
 // Resize监听与处理，更新Canvas Buffer Size
 export function CanvasBufferSizeHandler(gl: WebGLRenderingContext) {
@@ -12,7 +11,9 @@ export function CanvasBufferSizeHandler(gl: WebGLRenderingContext) {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
     // 设置Canvas缓存区
+    // eslint-disable-next-line no-param-reassign
     gl.canvas.width = windowWidth;
+    // eslint-disable-next-line no-param-reassign
     gl.canvas.height = windowHeight;
 
     if (gl.viewport) {

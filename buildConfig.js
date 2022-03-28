@@ -32,7 +32,7 @@ module.exports = {
   foldConfig,
   // HTML 配置，参考 html-webpack-plugin 配置直接传入
   htmlConfig: {
-    title: 'TSWeb 项目模板',
+    title: 'WebGL 笔记',
   },
   // 打包配置，简化
   optimiazion: {

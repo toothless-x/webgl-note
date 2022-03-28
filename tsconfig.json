@@ -9,6 +9,7 @@
       "@Api/*": ["src/api/*"],
       "@Styles/*": ["src/styles/*"],
       "@Assets/*": ["src/assets/*"],
+      "@WebGL/*": ["src/webgl/*"],
       "@Utils/*": ["src/utils/*"],
       "@Config/*":["src/config/*"],
     },
