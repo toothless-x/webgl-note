@@ -1,7 +1,35 @@
 {
-  "editor.tabSize": 2,
-  "files.autoSave": "onFocusChange",
+  // 显示宽度指示线
+  "editor.rulers": [
+    80,
+    110,
+  ],
+  "editor.insertSpaces": true, // tab 改为 空格
+  "editor.tabSize": 2, // tab 宽度为两个空格
+  "files.autoSave": "onFocusChange", // 离开 vscode 时自动保存
+  "files.eol": "\n", // LF格式换行
+  "files.insertFinalNewline": true, // 保存时最后添加一个空行
+  "files.trimFinalNewlines": true, // 保存时将最后所有空行合并一个空行
+  "editor.formatOnSave": false, // 保存时候自动格式化
+  // 保存时候执行的操作
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": false,
+  },
+  // JSON 关闭保存时自动格式化
+  "[jsonc]": {
+    "editor.formatOnSave": false,
+  },
+  "[json]": {
+    "editor.formatOnSave": false,
+  },
   "eslint.alwaysShowStatus": true,
-  "editor.rulers": [80, 110],
-  "files.insertFinalNewline": true,
+  "eslint.packageManager": "yarn",
+  "eslint.run": "onSave", // 保存时候执行 eslint
+  // 需要检验的文件类型
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "javascriptreact",
+  ],
 }
