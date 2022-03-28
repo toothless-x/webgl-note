@@ -2,13 +2,14 @@
 // 需要自行添加以下内容:
 //   entry, output, resolve.alias
 // plugin, moduel.rules可自行拓展
-
+const path = require('path');
 // 添加基础 loader, plugins
 const loadJavascript = require('./rules/loadJavascript');
 const loadTypescript = require('./rules/loadTypescript');
 const loadStyles = require('./rules/loadStyles');
 const loadStaticAssets = require('./rules/loadStaticAssets');
 const loadWebWorker = require('./rules/loadWebWorker');
+const loadShader = require('./rules/loadShader');
 // 添加基础 plugin
 const basePlugins = require('./plugins/basePlugins');
 
@@ -16,6 +17,9 @@ const basePlugins = require('./plugins/basePlugins');
 const getBuildEnv = require('./utils/getBuildEnv');
 // isDev: 是否开发环境, isBeta: 是否预发环境, isProd: 是否生产环境
 const { isDev, isBeta, isProd } = getBuildEnv();
+
+// 解析 Loader 路径
+const resoveLoaderPath = path.resolve(__dirname, './loaders');
 
 // 导出配置
 module.exports = {
@@ -52,7 +56,11 @@ module.exports = {
       ...loadStyles(),
       ...loadStaticAssets(),
       ...loadWebWorker(),
+      ...loadShader(),
     ]
+  },
+  resolveLoader: {
+    modules: ['node_modules', resoveLoaderPath]
   },
   plugins: [
     ...basePlugins(),

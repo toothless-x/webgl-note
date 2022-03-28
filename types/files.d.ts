@@ -12,6 +12,10 @@ declare module '*.gif';
 declare module '*.bmp';
 declare module '*.tiff';
 
+// 着色器文件
+declare module '*.vert';
+declare module '*.frag';
+
 // 函数声明
 /* eslint-disable no-unused-vars */
 declare function requestIdleCallback(callback: () => void): number;

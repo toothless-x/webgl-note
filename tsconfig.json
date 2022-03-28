@@ -6,6 +6,7 @@
       "@Root/*": ["*"],
       "@Src/*": ["src/*"],
       "@Views/*": ["src/views/*"],
+      "@Apps/*": ["src/apps/*"],
       "@Api/*": ["src/api/*"],
       "@Styles/*": ["src/styles/*"],
       "@Assets/*": ["src/assets/*"],

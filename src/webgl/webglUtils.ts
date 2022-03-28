@@ -93,23 +93,6 @@ class WebGLUtils {
     // Create a program object
     const program = WebGLUtils.createProgram(gl, vertexShader, fragShader);
     if (!program) {
-      return null;
-    }
-
-    // Attach the shader object
-    gl.attachShader(program, vertexShader);
-    gl.attachShader(program, fragShader);
-
-    // Link the program object
-    gl.linkProgram(program);
-
-    // Check the result of linking
-    const linked = gl.getProgramParameter(program, gl.LINK_STATUS);
-    if (!linked) {
-      const errMsg = gl.getProgramInfoLog(program);
-      // eslint-disable-next-line no-console
-      console.error('WebGLUtils.initShader error: ', errMsg);
-      gl.deleteProgram(program);
       gl.deleteShader(vertexShader);
       gl.deleteShader(fragShader);
       return null;

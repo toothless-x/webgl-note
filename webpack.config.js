@@ -91,6 +91,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
       '@Root': foldConfig.rootDir,
       '@Src': foldConfig.srcDir,
       '@Views': resolver(foldConfig.srcDir, 'views'),
+      '@Apps': resolver(foldConfig.srcDir, 'apps'),
       '@Api': resolver(foldConfig.srcDir, 'api'),
       '@Styles': resolver(foldConfig.srcDir, 'styles'),
       '@Assets': resolver(foldConfig.srcDir, 'assets'),
