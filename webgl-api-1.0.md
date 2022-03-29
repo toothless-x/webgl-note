@@ -39,7 +39,7 @@
     - INVALID_ENUM: 传入的 mode 不是上述类型之一
     - INVALID_VALUE: 参数 first | count 是负数
 
-## 着色器
+## 着色器变量
 ### `attribute`变量
 1. `gl.getAttribLocation(program, name)`: 获取由 name 指定的 attribute 变量的内存地址
   * 参数:
@@ -90,6 +90,128 @@
   - 错误:
     - INVALID_OPERATION: 不存在当前程序对象
     - INVALID_VALUE: transpose 不为 false, 或者数据长度小于16
+
+## 着色器
+### 创建着色器
+1. `gl.createShader(type)`: 创建由 type 指定的着色器对象
+  * 参数:
+    - type: 指定待创建的着色器类型;如下
+      - gl.VERTEX_SHADER: 顶点着色器
+      - gl.FRAGMENT_SHADER: 片元着色器
+  * 返回值:
+    - non-null: 创建的着色器
+    - null: 创建失败
+  * 错误:
+    - INVALID_ENUM: type 类型错误(只能是上述两种类型)
+
+2. `gl.shaderSource(shader, source)`: 将 source 指定的字符串形式代码传入 shader 指定的着色器。如果之前已经向 shader 传入过代码了，旧的代码将被替换(替换的代码不会自动编译，需要重新手动编译)
+  * 参数:
+    - shader: 指定需要传入代码的着色器对象
+    - source: 指定字符串形式的代码
+  * 返回值: 无
+  * 错误: 无
+
+3. `gl.compileShader(shader)`: 编译 sahder 指定的着色器中的源代码
+  * 参数:
+    - shader: 待编译代码的着色器
+  * 返回值: 无
+  * 错误: 无
+
+4. `gl.deleteSahder(shader)`: 删除 shader 指定的着色器
+  * 参数:
+    - shader: 待删除掉的着色器
+  * 返回值: 无
+  * 错误: 无
+
+5. `gl.getShaderParameter(shader, pname)`: 获取 shader 指定着色器中，panme 指定的参数信息
+  * 参数:
+    - shader: 指定获取参数的着色器
+    - pname: 指定待获取的参数类型; 类型如下:
+      - gl.SHADER_TYPE: 获取着色器类型(gl.VERTEX_SHADER | gl.GRAGMENT_SHADER)
+      - gl.DELETE_STATUS: 获取着色器是否被成功删除
+      - gl.COMPILE_STATUS: 获取着色器是否被成功编译
+  * 返回值: 根据 pname 的不同，返回不同的值
+    - gl.SHADER_TYPE: gl.VERTEX_SHADER | GL.FRAGMENT_SHADER
+    - gl.DELETE_STATUS: true | false
+    - gl.COMPILE_STATUS:  true | false
+  * 错误:
+    - INVALID_ENUM: pname 的值无效
+
+6. `gl.getShaderInfoLog(shader)`: 获取 shader 指定的着色器的信息日志
+  * 参数:
+    - shader: 指定获取信息日志的着色器
+  * 返回值:
+    - non-null: 包含日志信息的字符串
+    - null: 没有编译错误
+  * 错误: 无
+
+### 创建程序对象
+1. `gl.createProgram()`: 创建程序对象
+  * 参数: 无
+  * 返回值:
+    - non-null: 新创建的程序对象
+    - null: 创建失败
+  * 错误: 无
+
+2. `gl.attachShader(program, shader)`: 将 shader指定的着色器对象分配给 program 指定的程序对象
+  * 参数:
+    - program: 指定的程序对象
+    - shader: 指定的着色器对象
+  * 返回值: 无
+  * 错误:
+    - INVALID_OPERATION: shader 已经被分配给了 program
+
+3. `gl.linkProgram(program)`: 链接 program 指定的程序对象中的着色器
+  * 参数:
+    - program: 指定的程序对象
+  * 返回值: 无
+  * 错误: 无
+
+4. `gl.useProgram(program)`: 告知 WebGL 系统绘制是使用 program 指定的程序对象
+  * 参数:
+    - program: 指定待使用的程序对象
+  * 返回值: 无
+  * 错误: 无
+
+5. `gl.detachShader(program, shader)`: 取消 shader 指定的着色器对象对 program 指定的程序对象的分配
+  * 参数:
+    - program: 指定程序对象
+    - shader: 指定的着色器对象
+  * 返回值: 无
+  * 错误:
+    - INVALID_OPERATION: shader 没有被分配给 program
+
+6. `gl.deleteProgram(program)`: 删除 program 指定的程序对象。如果该程序正在被使用，则不会立即删除，而是等他不在被使用后在删除
+  * 参数:
+    - program: 指定待删除的 program 对象
+  * 返回值: 无
+  * 错误: 无
+
+7. `gl.getProgramParameter(program, pname)`: 获取 program 指定的程序对象中 pname指定的参数信息。返回值随着 pname 的不同而不同
+  * 参数:
+    - program: 指定程序对象
+    - pname: 指定待获取的参数类型; 类型如下:
+      - gl.DELETE_STATUS: 程序否被成功删除
+      - gl.LINK_STATUS: 程序是否已经成功连接
+      - gl.VALIDATE_STATUS: 程序是否已经通过验证
+      - gl.ATTACHED_SHADER: 已经被分配给程序的着色器数量
+      - gl.ACTIVE_ATTRIBUTES: 顶点着色器中 attribute 变量的数量
+      - gl.ACTIVE_UNIFORMS: 程序中 uniform 变量的数量
+  * 返回值:
+    - gl.DELETE_STATUS: true | false
+    - gl.LINK_STATUS: true | false
+    - gl.VALIDATE_STATUS: true | false
+    - gl.ATTACHED_SHADER: number
+    - gl.ACTIVE_ATTRIBUTES: number
+    - gl.ACTIVE_UNIFORMS: number
+  * 错误:
+    - INVALID_ENUM: pname 的值无效
+
+8. `gl.getProgramInfoLog(program)`: 获取 program 指定的程序对象的信息日志
+  * 参数:
+    - program: 指定待获取信息日志的程序对象
+  * 返回值: 包含信息日志的字符串
+  * 错误: 无
 
 ## 缓冲区
 > 缓冲区使用流程:

@@ -1,14 +1,14 @@
 /* eslint-disable camelcase */
 import { WebGLUtils } from '@WebGL/webglUtils'; // webgl utils
 
-import trangleVert from './traingle.vert';
-import trangleFrag from './traingle.frag';
+import trangleVert from './triangle.vert'; // vertex shader
+import trangleFrag from './triangle.frag'; // fragment shader
 
 // 三角形应用
 class TraingleApp {
   constructor(gl: WebGLRenderingContext) {
     // 清理画布
-    gl.clearColor(0, 0, 0, 0);
+    gl.clearColor(0, 0, 0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // 初始化程序对象
@@ -26,7 +26,7 @@ class TraingleApp {
     const pointSize = this.initVertexBuffers(gl, a_Position);
 
     // 绘制点
-    gl.drawArrays(gl.POINTS, 0, pointSize);
+    gl.drawArrays(gl.TRIANGLES, 0, pointSize);
   }
 
   initVertexBuffers = (gl: WebGLRenderingContext, aPointer: number) => {
@@ -36,6 +36,9 @@ class TraingleApp {
       0.0, 0.5,
       -0.5, -0.5,
       0.5, -0.5,
+      // 100, 150,
+      // -150, -150,
+      // 150, 150,
     ]);
 
     // 创建缓冲区

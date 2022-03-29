@@ -75,6 +75,8 @@ class WebGLUtils {
       return null;
     }
 
+    // Use program
+    gl.useProgram(program);
     return program;
   }
 
