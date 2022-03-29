@@ -10,7 +10,8 @@ class TraingleApp {
   private gl: WebGLRenderingContext; // 绘制上下文
   private program: WebGLProgram | null = null; // 当前程序对象
   private pointSize: number; // 需要绘制的点数量
-  private aPosition: number; // 赋值给 gl_Position 的变量
+  private aPosition: number; // 赋值给 gl_Position 变量的存储位置
+  private aColor: number; // 着色器中 a_Color 变量的存储位置
   private uXformMatrix: WebGLUniformLocation; // 变换矩阵变量的位置
 
   private rotateAngle: number = 45; // 旋转角度
@@ -29,6 +30,12 @@ class TraingleApp {
     if (this.aPosition < 0) {
       throw new Error('get a_Position error');
     }
+    // 获取着色器中 a_Color 变量的存储位置
+    this.aColor = gl.getAttribLocation(this.program, 'a_Color');
+    if (this.aColor < 0) {
+      throw new Error('get a_Position error');
+    }
+
     // 获取赋值给变换矩阵的变量位置
     const uXformMatrix = gl.getUniformLocation(this.program, 'u_xformMatrix');
     if (!uXformMatrix) {
@@ -36,19 +43,21 @@ class TraingleApp {
     }
     this.uXformMatrix = uXformMatrix;
     // 初始化 point position Buffer
-    this.pointSize = this.initVertexBuffers(gl, this.aPosition);
+    this.pointSize = this.initVertexBuffers(gl, this.aPosition, this.aColor);
     // 计算初始化变化矩阵
     this.transMatrix = new Matrix4();
   }
 
-  initVertexBuffers = (gl: WebGLRenderingContext, aPointer: number) => {
-    // Buffer 数据
-    const pointSize = 3;
+  initVertexBuffers = (gl: WebGLRenderingContext, aPointer: number, aColor: number) => {
+    const pointSize = 3; // Buffer 数据
+    // 顶点坐标 和 颜色
     const vertices = new Float32Array([
-      0.0, 0.5,
-      -0.5, -0.5,
-      0.5, -0.5,
+      0.0, 0.5, 1.0, 0.0, 0.0,
+      -0.5, -0.5, 0.0, 1.0, 0.0,
+      0.5, -0.5, 0.0, 0.0, 1.0,
     ]);
+    const bufferDataSize = vertices.BYTES_PER_ELEMENT; // 缓存区数据大小单位值
+    const sepDataSize = bufferDataSize * 5; // 间隔的数据大小
 
     // 创建缓冲区
     const vertexBuffer = gl.createBuffer();
@@ -59,10 +68,16 @@ class TraingleApp {
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
     // 写入缓冲区数据
     gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+    // 1. 位置分配
     // 将缓冲区对象分配给变量
-    gl.vertexAttribPointer(aPointer, 2, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(aPointer, 2, gl.FLOAT, false, sepDataSize, 0);
     // 链接变量与分配给他的缓冲区
     gl.enableVertexAttribArray(aPointer);
+
+    // 2. 颜色分配
+    gl.vertexAttribPointer(aColor, 3, gl.FLOAT, false, sepDataSize, bufferDataSize * 2);
+    gl.enableVertexAttribArray(aColor);
 
     return pointSize;
   }
@@ -70,7 +85,7 @@ class TraingleApp {
   // 变换旋转矩阵
   rotateMatrix = (angle: number) => {
     // 饶 Z 轴旋转
-    this.transMatrix.setRotate(angle, 1, 1, 1);
+    this.transMatrix.setRotate(angle, 0, 0, 1);
   }
 
   // 更新数据
