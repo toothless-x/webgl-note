@@ -19,10 +19,25 @@ function MainAPP() {
   // 设置 canvas 元素属性为耗时操作，设置完之后系统会更新 drawingBuffer 大小
   CanvasBufferSizeHandler(glContext); // Resize handler;
 
+  // 运行动画
+  const animationApp = (app: unknown) => {
+    // @ts-expect-error shit
+    // eslint-disable-next-line no-unused-expressions
+    app.update && app.update();
+    // @ts-expect-error shit
+    // eslint-disable-next-line no-unused-expressions
+    app.run && app.run();
+
+    window.requestAnimationFrame(() => animationApp(app));
+  };
+
   // 运行程序
   setTimeout(() => {
     // eslint-disable-next-line no-new
-    new TraingleApp(glContext);
+    const app = new TraingleApp(glContext);
+
+    // 执行动画
+    animationApp(app);
   });
 }
 

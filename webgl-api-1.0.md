@@ -81,7 +81,7 @@
   * 错误:
     - INVALID_OPERATION: 没有当前的 program 对象，或者 location 是非法的存储位置
 
-3. `gl.uniformMaterix4fv(location, transpose, array)`: 将 array 表示的 4x4 矩阵分配给由 location 指定的 uniform 变量
+3. `gl.uniformMatrix4fv(location, transpose, array)`: 将 array 表示的 4x4 矩阵分配给由 location 指定的 uniform 变量
   - 参数:
     - location: uniform 变量的存储位置
     - Transpose: WebGL 中必须置位 false(表示是否转置矩阵，WebGL 没有实现该方法，所以必须置位 false)。

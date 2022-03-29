@@ -96,6 +96,7 @@ module.exports = webpackMerge(baseWebpackConfig, {
       '@Styles': resolver(foldConfig.srcDir, 'styles'),
       '@Assets': resolver(foldConfig.srcDir, 'assets'),
       '@WebGL': resolver(foldConfig.srcDir, 'webgl'),
+      '@Math': resolver(foldConfig.srcDir, 'math'),
       '@Utils': resolver(foldConfig.srcDir, 'utils'),
       '@Config': resolver(foldConfig.srcDir, 'config'),
     },

@@ -11,7 +11,7 @@ import { Vector4 } from './vector4';
  */
 class Matrix4 {
   // 所有内置元素
-  private _elements: Float32Array;
+  private _elements!: Float32Array;
 
   constructor(source?: Matrix4) {
     // 如果有传入源对象，则使用源对象进行初始化
@@ -728,5 +728,5 @@ class Matrix4 {
 }
 
 export {
-  Matrix4 as Materix4,
+  Matrix4,
 };

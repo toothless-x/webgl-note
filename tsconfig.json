@@ -11,6 +11,7 @@
       "@Styles/*": ["src/styles/*"],
       "@Assets/*": ["src/assets/*"],
       "@WebGL/*": ["src/webgl/*"],
+      "@Math/*": ["src/math/*"],
       "@Utils/*": ["src/utils/*"],
       "@Config/*":["src/config/*"],
     },
