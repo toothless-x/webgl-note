@@ -15,7 +15,7 @@ class TraingleApp {
   private uXformMatrix: WebGLUniformLocation; // 变换矩阵变量的位置
 
   private rotateAngle: number = 45; // 旋转角度
-  private transMatrix: Matrix4; // 变化矩阵
+  private modelMatrix: Matrix4; // 模型变化矩阵
 
   constructor(gl: WebGLRenderingContext) {
     this.gl = gl;
@@ -45,7 +45,7 @@ class TraingleApp {
     // 初始化 point position Buffer
     this.pointSize = this.initVertexBuffers(gl, this.aPosition, this.aColor);
     // 计算初始化变化矩阵
-    this.transMatrix = new Matrix4();
+    this.modelMatrix = new Matrix4();
   }
 
   initVertexBuffers = (gl: WebGLRenderingContext, aPointer: number, aColor: number) => {
@@ -85,7 +85,7 @@ class TraingleApp {
   // 变换旋转矩阵
   rotateMatrix = (angle: number) => {
     // 饶 Z 轴旋转
-    this.transMatrix.setRotate(angle, 0, 0, 1);
+    this.modelMatrix.setRotate(angle, 0, 0, 1);
   }
 
   // 更新数据
@@ -93,7 +93,7 @@ class TraingleApp {
     this.rotateAngle += 1; // 5度的增幅
     this.rotateMatrix(this.rotateAngle); // 计算旋转矩阵
     // 矩阵数据传入 webgl 变量
-    gl.uniformMatrix4fv(this.uXformMatrix, false, this.transMatrix.elements);
+    gl.uniformMatrix4fv(this.uXformMatrix, false, this.modelMatrix.elements);
   }
 
   // 执行绘制
