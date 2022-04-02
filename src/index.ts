@@ -1,6 +1,7 @@
 import 'normalize.css'; // initialize all style
 import { WebGLUtils } from '@WebGL/webglUtils'; // webgl utils
-import { CanvasBufferSizeHandler } from '@Utils/domHelper';
+import { CanvasBufferSizeHandler } from '@Utils/domHelper'; // dom utils
+import { iApp } from '@Src/index.type'; // 应用类型
 
 import { TraingleApp } from '@Apps/chapter3/triangle';
 
@@ -19,26 +20,40 @@ function MainAPP() {
   // 设置 canvas 元素属性为耗时操作，设置完之后系统会更新 drawingBuffer 大小
   CanvasBufferSizeHandler(glContext); // Resize handler;
 
-  // 运行动画
-  const animationApp = (app: unknown) => {
-    // @ts-expect-error shit
-    // eslint-disable-next-line no-unused-expressions
-    app.update && app.update();
-    // @ts-expect-error shit
-    // eslint-disable-next-line no-unused-expressions
-    app.run && app.run();
+  let rafRef: number | null = null; // 动画索引
+  let rafAnim: (ts?: number) => void = () => {}; // 运行动画
 
-    window.requestAnimationFrame(() => animationApp(app));
+  // @ts-ignore stop
+  MainAPP.stop = () => {
+    if (rafRef) {
+      window.cancelAnimationFrame(rafRef);
+    }
+  };
+  // @ts-ignore start
+  MainAPP.start = () => {
+    const now = Date.now();
+    rafAnim(now);
+  };
+
+  // 运行动画
+  const animationApp = (app: iApp, ts?: number) => {
+    app.update(ts); // update app
+    app.run(ts); // run app
+
+    rafRef = window.requestAnimationFrame(rafAnim);
   };
 
   // 运行程序
   setTimeout(() => {
-    // eslint-disable-next-line no-new
     const app = new TraingleApp(glContext);
-
     // 执行动画
-    animationApp(app);
+    rafAnim = (ts?: number) => animationApp(app, ts);
+
+    // @ts-ignore start app
+    MainAPP.start();
   });
 }
 
+// @ts-ignore export
+window.MainAPP = MainAPP;
 MainAPP();

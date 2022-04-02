@@ -1,12 +1,13 @@
 /* eslint-disable lines-between-class-members */
 import { WebGLUtils } from '@WebGL/webglUtils'; // webgl utils
 import { Matrix4 } from '@Math/materix4'; // 4x4 矩阵
+import { iApp } from '@Src/index.type'; // 实现应用基本功能
 
 import trangleVert from './triangle.vert'; // vertex shader
 import trangleFrag from './triangle.frag'; // fragment shader
 
 // 三角形应用
-class TraingleApp {
+class TraingleApp implements iApp {
   private gl: WebGLRenderingContext; // 绘制上下文
   private program: WebGLProgram | null = null; // 当前程序对象
   private pointSize: number; // 需要绘制的点数量
@@ -14,8 +15,10 @@ class TraingleApp {
   private aColor: number; // 着色器中 a_Color 变量的存储位置
   private uXformMatrix: WebGLUniformLocation; // 变换矩阵变量的位置
 
-  private rotateAngle: number = 45; // 旋转角度
+  private rotateAngle: number = 0; // 旋转角度
   private modelMatrix: Matrix4; // 模型变化矩阵
+
+  private prevElapsed: number = 0; // 上一动画时间戳
 
   constructor(gl: WebGLRenderingContext) {
     this.gl = gl;
@@ -89,15 +92,39 @@ class TraingleApp {
   }
 
   // 更新数据
-  update = (gl: WebGLRenderingContext = this.gl) => {
-    this.rotateAngle += 1; // 5度的增幅
+  update = (ts?: number) => {
+    if (typeof ts !== 'number') return;
+
+    const { gl } = this;
+    let { prevElapsed } = this;
+    if (prevElapsed === 0) {
+      // eslint-disable-next-line no-multi-assign
+      this.prevElapsed = prevElapsed = ts;
+    }
+    // 每 10ms 旋转 0.72 度; 5s 旋转 360 度
+    // 每 10ms 旋转 1.2 度; 3s 旋转 360 度
+    const timeStep = ts - prevElapsed;
+    if (timeStep >= 0) {
+      const rotateStep = Number.parseFloat(((timeStep / 10) * 0.72).toFixed(2));
+      this.rotateAngle += rotateStep;
+    }
+
+    // 旋转满 360 度后，重置角度
+    if (this.rotateAngle > 360) {
+      this.rotateAngle -= 360;
+    }
+
     this.rotateMatrix(this.rotateAngle); // 计算旋转矩阵
     // 矩阵数据传入 webgl 变量
     gl.uniformMatrix4fv(this.uXformMatrix, false, this.modelMatrix.elements);
+
+    this.prevElapsed = ts; // 更新上一次的执行时间
   }
 
   // 执行绘制
-  run = (gl: WebGLRenderingContext = this.gl) => {
+  run = () => {
+    const { gl } = this;
+
     // 清理画布
     gl.clearColor(0, 0, 0, 1.0);
     gl.clear(gl.COLOR_BUFFER_BIT);
