@@ -1,7 +1,7 @@
 import { debounce } from 'lodash';
 
 // Resize监听与处理，更新Canvas Buffer Size
-function canvasBufferSizeHandler(gl: WebGLRenderingContext) {
+export const canvasBufferSizeHandler = (gl: WebGLRenderingContext) => {
   if (!gl || !gl.canvas) {
     throw new Error('canvas is null');
   }
@@ -37,8 +37,4 @@ function canvasBufferSizeHandler(gl: WebGLRenderingContext) {
   document.documentElement.addEventListener('unload', () => {
     window.removeEventListener('resize', resizeHandler);
   });
-}
-
-export {
-  canvasBufferSizeHandler as CanvasBufferSizeHandler,
 };

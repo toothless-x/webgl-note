@@ -1,9 +1,10 @@
 import 'normalize.css'; // initialize all style
 import { WebGLUtils } from '@WebGL/webglUtils'; // webgl utils
-import { CanvasBufferSizeHandler } from '@Utils/domHelper'; // dom utils
+import { canvasBufferSizeHandler } from '@Utils/domHelper'; // dom utils
 import { iApp } from '@Src/index.type'; // 应用类型
 
-import { TraingleApp } from '@Apps/chapter3/triangle';
+// import { TraingleApp } from '@Apps/chapter3/triangle'; // 变化的三角形
+import { TextureApp } from '@Apps/chapter5/texture'; // 纹理贴图
 
 // 主要应用程序
 function MainAPP() {
@@ -18,7 +19,7 @@ function MainAPP() {
   // 获取 WebGLReanderingContext
   const glContext = WebGLUtils.create3DContext(canvas as HTMLCanvasElement);
   // 设置 canvas 元素属性为耗时操作，设置完之后系统会更新 drawingBuffer 大小
-  CanvasBufferSizeHandler(glContext); // Resize handler;
+  canvasBufferSizeHandler(glContext); // Resize handler;
 
   let rafRef: number | null = null; // 动画索引
   let rafAnim: (ts?: number) => void = () => {}; // 运行动画
@@ -45,12 +46,13 @@ function MainAPP() {
 
   // 运行程序
   setTimeout(() => {
-    const app = new TraingleApp(glContext);
+    // const app = new TraingleApp(glContext);
+    const app = new TextureApp(glContext);
     // 执行动画
     rafAnim = (ts?: number) => animationApp(app, ts);
 
     // @ts-ignore start app
-    MainAPP.start();
+    // MainAPP.start();
   });
 }
 
