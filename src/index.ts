@@ -4,7 +4,8 @@ import { canvasBufferSizeHandler } from '@Utils/domHelper'; // dom utils
 import { iApp } from '@Src/index.type'; // 应用类型
 
 // import { TraingleApp } from '@Apps/chapter3/triangle'; // 变化的三角形
-import { TextureApp } from '@Apps/chapter5/texture'; // 纹理贴图
+// import { TextureApp } from '@Apps/chapter5/texture'; // 纹理贴图
+import { TraingleApp } from '@Apps/chapter7/triangle'; // 变化的三角形
 
 // 主要应用程序
 function MainAPP() {
@@ -46,13 +47,13 @@ function MainAPP() {
 
   // 运行程序
   setTimeout(() => {
-    // const app = new TraingleApp(glContext);
-    const app = new TextureApp(glContext);
+    const app = new TraingleApp(glContext);
+    // const app = new TextureApp(glContext);
     // 执行动画
     rafAnim = (ts?: number) => animationApp(app, ts);
 
     // @ts-ignore start app
-    // MainAPP.start();
+    MainAPP.start();
   });
 }
 
