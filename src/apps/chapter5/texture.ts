@@ -12,11 +12,14 @@ class TextureApp implements iApp {
   private pointSize: number; // 需要绘制的点数量
   private aPosition: number; // 赋值给 gl_Position 变量的存储位置
   private aTexCoord: number; // 顶点着色器中 a_TexCoord 的变量
-  private uSampler: WebGLUniformLocation; // 片元着色器中 u_Sampler 纹理变量的存储位置
+  private uSampler0: WebGLUniformLocation; // 片元着色器中 u_Sampler0 纹理变量的存储位置
+  private uSampler1: WebGLUniformLocation; // 片元着色器中 u_Sampler1 纹理变量的存储位置
 
   // private prevElapsed: number = 0; // 上一动画时间戳
-  // private textureInited: boolean = false; // 纹理是否初始化完成
-  private imageUrl = '/images/miao.jpg'; // 下载图片地址
+  private texture0Inited: boolean = false; // 纹理1是否初始化完成
+  private texture1Inited: boolean = false; // 纹理2是否初始化完成
+  private imageUrl0 = '/images/miao.jpg'; // 下载图片地址0
+  private imageUrl1 = '/images/sky.jpeg'; // 下载图片地址1
 
   constructor(gl: WebGLRenderingContext) {
     this.gl = gl;
@@ -41,18 +44,30 @@ class TextureApp implements iApp {
       throw new Error('get aTexCoord error');
     }
     // 2.3获取片元着色器中纹理变量
-    const uSampler = gl.getUniformLocation(this.program, 'u_Sampler');
-    if (!uSampler) {
+    const uSampler0 = gl.getUniformLocation(this.program, 'u_Sampler0');
+    if (!uSampler0) {
       throw new Error('get uSampler error');
     } else {
-      this.uSampler = uSampler;
+      this.uSampler0 = uSampler0;
+    }
+    const uSampler1 = gl.getUniformLocation(this.program, 'u_Sampler1');
+    if (!uSampler1) {
+      throw new Error('get uSampler error');
+    } else {
+      this.uSampler1 = uSampler1;
     }
 
     // 3. 初始化 point position Buffer
     this.pointSize = this.initVertexBuffers(gl, this.aPosition, this.aTexCoord);
     // 4. 初始化纹理
-    loadImagePromise(this.imageUrl).then((image) => {
-      this.initTexture(this.gl, image, this.uSampler, 0);
+    loadImagePromise(this.imageUrl0).then((image) => {
+      this.initTexture(this.gl, image, this.uSampler0, 0);
+      this.texture0Inited = true;
+      this.run();
+    });
+    loadImagePromise(this.imageUrl1).then((image) => {
+      this.initTexture(this.gl, image, this.uSampler1, 1);
+      this.texture1Inited = true;
       this.run();
     });
   }
@@ -64,15 +79,15 @@ class TextureApp implements iApp {
     const pointSize = 4; // Buffer 数据
     const verticesTexCoords = new Float32Array([
       // 顶点坐标 和 纹理坐标
-      // -0.5, 0.5, 0.0, 1.0,
-      // -0.5, -0.5, 0.0, 0.0,
-      // 0.5, 0.5, 1.0, 1.0,
-      // 0.5, -0.5, 1.0, 0.0,
-      // 纹理坐标进行拉伸
       -0.5, 0.5, 0.0, 1.0,
-      -0.5, -0.5, 0.25, 0.25,
-      0.5, 0.5, 0.75, 0.75,
+      -0.5, -0.5, 0.0, 0.0,
+      0.5, 0.5, 1.0, 1.0,
       0.5, -0.5, 1.0, 0.0,
+      // 纹理坐标进行拉伸
+      // -0.5, 0.5, 0.0, 1.0,
+      // -0.5, -0.5, 0.25, 0.25,
+      // 0.5, 0.5, 0.75, 0.75,
+      // 0.5, -0.5, 1.0, 0.0,
     ]);
     const bufferDataSize = verticesTexCoords.BYTES_PER_ELEMENT; // 缓存区数据大小单位值
     const sepDataSize = bufferDataSize * 4; // 间隔的数据大小
@@ -130,7 +145,8 @@ class TextureApp implements iApp {
   update() {}
 
   run() {
-    const { gl } = this;
+    const { gl, texture0Inited, texture1Inited } = this;
+    if (!texture0Inited || !texture1Inited) return;
 
     // 清理画布
     gl.clearColor(0, 0, 0, 1.0);

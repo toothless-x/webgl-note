@@ -53,9 +53,13 @@ function MainAPP() {
 
     // @ts-ignore start app
     // MainAPP.start();
-  }, 1000);
+  });
 }
 
 // @ts-ignore export
 window.MainAPP = MainAPP;
 MainAPP();
+
+if ((module as any).hot) {
+  (module as any).hot.accept();
+}
