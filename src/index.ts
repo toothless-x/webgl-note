@@ -53,7 +53,7 @@ function MainAPP() {
 
     // @ts-ignore start app
     // MainAPP.start();
-  });
+  }, 1000);
 }
 
 // @ts-ignore export

@@ -16,7 +16,7 @@ class TextureApp implements iApp {
 
   // private prevElapsed: number = 0; // 上一动画时间戳
   // private textureInited: boolean = false; // 纹理是否初始化完成
-  private imageUrl = '/images/sky.jpeg'; // 下载图片地址
+  private imageUrl = '/images/miao.jpg'; // 下载图片地址
 
   constructor(gl: WebGLRenderingContext) {
     this.gl = gl;
@@ -64,9 +64,14 @@ class TextureApp implements iApp {
     const pointSize = 4; // Buffer 数据
     const verticesTexCoords = new Float32Array([
       // 顶点坐标 和 纹理坐标
+      // -0.5, 0.5, 0.0, 1.0,
+      // -0.5, -0.5, 0.0, 0.0,
+      // 0.5, 0.5, 1.0, 1.0,
+      // 0.5, -0.5, 1.0, 0.0,
+      // 纹理坐标进行拉伸
       -0.5, 0.5, 0.0, 1.0,
-      -0.5, -0.5, 0.0, 0.0,
-      0.5, 0.5, 1.0, 1.0,
+      -0.5, -0.5, 0.25, 0.25,
+      0.5, 0.5, 0.75, 0.75,
       0.5, -0.5, 1.0, 0.0,
     ]);
     const bufferDataSize = verticesTexCoords.BYTES_PER_ELEMENT; // 缓存区数据大小单位值
@@ -100,15 +105,22 @@ class TextureApp implements iApp {
     image: HTMLImageElement, location: WebGLUniformLocation,
     texUnit: number,
   ) => {
-    const texture = gl.createTexture(); // 创建纹理对象
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // 对纹理进行 Y 轴反转
-
     // @ts-ignore has textunit
     gl.activeTexture(gl[`TEXTURE${texUnit}`]); // 开启 texUnit 号纹理单元
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, 1); // 对纹理进行 Y 轴反转
+
+    const texture = gl.createTexture(); // 创建纹理对象
     gl.bindTexture(gl.TEXTURE_2D, texture); // 向 target 绑定纹理对象
 
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); // 配置纹理参数
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image); // 配置纹理图像
+    // 必须配置四个参数，否则会有黑屏
+    // 配置纹理参数
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR); // 放大方法
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); // 缩小方法
+    // Solved Problem: image is black problem
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); // 水平填充
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE); // 竖直填充
+
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, image); // 配置纹理图像
     gl.uniform1i(location, texUnit);
 
     return texture;
